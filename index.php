@@ -34,12 +34,13 @@ foreach ($events as $event) {
 
   //replyTextMessage($bot, $event->getReplyToken(),$hash[$key]);//$event->getText());
   $pdo = connectDb();
-  $sql = 'select * from tanilun';
+  $sql = 'select url from tanilun';
   try{
-    foreach ($pdo->query($sql) as $row) {
-        error_log($row['id']);
-        error_log($row['url'].'<br>');
+    $stmt = $pdo->query($sql);
+    while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+        replyImageMessage($bot, $event->getReplyToken(),$result['url'],$result['url'])
     }
+
   }catch (PDOException $e){
     error_log('Error:'.$e->getMessage());
     die();
