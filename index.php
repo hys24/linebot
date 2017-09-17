@@ -38,6 +38,7 @@ foreach ($events as $event) {
   try{
     $stmt = $pdo->query($sql);
     while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+        error_log($result['url']);
         replyImageMessage($bot, $event->getReplyToken(),$result['url'],$result['url']);
     }
 
