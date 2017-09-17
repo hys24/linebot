@@ -38,7 +38,7 @@ foreach ($events as $event) {
   try{
     $stmt = $pdo->query($sql);
     while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
-        replyImageMessage($bot, $event->getReplyToken(),$result['url'],$result['url'])
+        replyImageMessage($bot, $event->getReplyToken(),$result['url'],$result['url']);
     }
 
   }catch (PDOException $e){
