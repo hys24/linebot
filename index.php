@@ -32,12 +32,18 @@ foreach ($events as $event) {
   $key = array_rand($hash);
   error_log($hash[$key]);
 
-  replyTextMessage($bot, $event->getReplyToken(),$hash[$key]);//$event->getText());
-  //connectDb();
-  $url = parse_url(getenv('DATABASE_URL'));
-  $dsn = sprintf('pgsql:host=%s;dbname=%s', $url['host'], substr($url['path'], 1));
-  $pdo = new PDO($dsn, $url['user'], $url['pass']);
-  error_log($pdo->getAttribute(PDO::ATTR_SERVER_VERSION));
+  //replyTextMessage($bot, $event->getReplyToken(),$hash[$key]);//$event->getText());
+  $pdo = connectDb();
+  $sql = 'select * from tanilun';
+  try{
+    foreach ($pdo->query($sql) as $row) {
+        error_log(convert_enc($row['id']));
+        error_log(convert_enc($row['url']).'<br>');
+    }
+  }catch (PDOException $e){
+    error_log('Error:'.$e->getMessage());
+    die();
+  }
   // replyImageMessage($bot, $event->getReplyToken(),'https://lh3.googleusercontent.com/ujwUalQqlHoYJSdf1280s49R2HhIMUPxBPAX7aB65BE81d9ewDmwIU2Q0QIHIUZS2y6fGOrBNMhLZP1rY83pSq0BiQJ7EIKpn9q9c-URDn0gI5_BRgKq2W8iE68xp3jxDm4FPg_1P-F-AEdLPyA8FJR6yEd7dmER-WJCKOyeyO4v0d-8-9PC70KoTWf6T_RRJXp7D_KTEcRP4l4ktTHRXN0dniSma0PV4sCUuBmUklDJ9-O3y21SE_x3-6hiIW8ckIwExmzjXzpqle_Ix2iZm1mr_oQZ3dKjHDN8n-KU5ugdJZqvRx1IncLt69NFAVkVYPArDGAmqAUSnq5cSvqlCRpzXbfx1nsJMWf7Ka0bO379K5z09mAlRFCTBiwj3G_ecQMJOwzLNCLvL5PV0tKCS70EGo5RPhkJxXMnrKqdibg1i4uN13aYCynYszlboW3GCHAxLbpeyROiekOgbw8drVhPzu3TsbAR8VWwDyHNggUpa1GlTnNweGt0FJafB0H5Yx_Vf60_1vcysVmr1WoqkHUriJqm1GfCkLnTa7Ta3Olp6tUxqAzqo1LwgtEPXcAsmZSzKVx1MW7IolnagITBXFKn5ZJfCX1EyR-brkAGc2gg9LRnfXZ2yvDzrT7XpJakVbHhWidqnK823MnJR-pueD8MGLC3kjwN3CNiN3EHFEmbhg=w1254-h836-no'
   // ,'https://lh3.googleusercontent.com/ujwUalQqlHoYJSdf1280s49R2HhIMUPxBPAX7aB65BE81d9ewDmwIU2Q0QIHIUZS2y6fGOrBNMhLZP1rY83pSq0BiQJ7EIKpn9q9c-URDn0gI5_BRgKq2W8iE68xp3jxDm4FPg_1P-F-AEdLPyA8FJR6yEd7dmER-WJCKOyeyO4v0d-8-9PC70KoTWf6T_RRJXp7D_KTEcRP4l4ktTHRXN0dniSma0PV4sCUuBmUklDJ9-O3y21SE_x3-6hiIW8ckIwExmzjXzpqle_Ix2iZm1mr_oQZ3dKjHDN8n-KU5ugdJZqvRx1IncLt69NFAVkVYPArDGAmqAUSnq5cSvqlCRpzXbfx1nsJMWf7Ka0bO379K5z09mAlRFCTBiwj3G_ecQMJOwzLNCLvL5PV0tKCS70EGo5RPhkJxXMnrKqdibg1i4uN13aYCynYszlboW3GCHAxLbpeyROiekOgbw8drVhPzu3TsbAR8VWwDyHNggUpa1GlTnNweGt0FJafB0H5Yx_Vf60_1vcysVmr1WoqkHUriJqm1GfCkLnTa7Ta3Olp6tUxqAzqo1LwgtEPXcAsmZSzKVx1MW7IolnagITBXFKn5ZJfCX1EyR-brkAGc2gg9LRnfXZ2yvDzrT7XpJakVbHhWidqnK823MnJR-pueD8MGLC3kjwN3CNiN3EHFEmbhg=w1254-h836-no');//$event->getText());
 
@@ -46,8 +52,13 @@ foreach ($events as $event) {
 function connectDb(){
   $url = parse_url(getenv('DATABASE_URL'));
   $dsn = sprintf('pgsql:host=%s;dbname=%s', $url['host'], substr($url['path'], 1));
-  $pdo = new PDO($dsn, $url['user'], $url['pass']);
-  var_dump($pdo->getAttribute(PDO::ATTR_SERVER_VERSION));
+  try{
+    $pdo = new PDO($dsn, $url['user'], $url['pass']);
+  }catch (PDOException $e){
+    print('Error:'.$e->getMessage());
+    die();
+  }
+  return $pdo;
 }
 
 function replyTextMessage($bot, $replyToken, $text){
@@ -64,6 +75,6 @@ function replyImageMessage($bot, $replyToken, $originalImageUrl, $previewImageUr
   }
 }
 
-
+ 
 
  ?>
