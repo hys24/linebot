@@ -37,8 +37,8 @@ foreach ($events as $event) {
   $sql = 'select * from tanilun';
   try{
     foreach ($pdo->query($sql) as $row) {
-        error_log(convert_enc($row['id']));
-        error_log(convert_enc($row['url']).'<br>');
+        error_log($row['id']);
+        error_log($row['url'].'<br>');
     }
   }catch (PDOException $e){
     error_log('Error:'.$e->getMessage());
@@ -75,6 +75,6 @@ function replyImageMessage($bot, $replyToken, $originalImageUrl, $previewImageUr
   }
 }
 
- 
+
 
  ?>
