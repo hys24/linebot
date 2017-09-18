@@ -30,7 +30,7 @@ foreach ($events as $event) {
 
   //replyTextMessage($bot, $event->getReplyToken(),$hash[$key]);//$event->getText());
   $pdo = connectDb();
-  $sql = 'select * from tanilun where id = "1"';
+  $sql = 'select * from tanilun';
   try{
     $stmt = $pdo->query($sql);
     while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
