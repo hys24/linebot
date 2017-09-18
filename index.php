@@ -38,10 +38,10 @@ foreach ($events as $event) {
     $result = $allResult[$key];
     //while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
         replyMultiMessage($bot, $event->getReplyToken(),
+        new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
         new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']),
         new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['price']),
-        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description']),
-        new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image'])
+        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description'])
       );
     //}
 
