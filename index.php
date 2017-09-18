@@ -80,8 +80,6 @@ function replyMultiMessage($bot, $replyToken, ...$msgs){
   foreach ($msgs as $msg) {
     $sendMessage->add($msg);
   }
-  $sendMessage->add($msgs);
-
   $response = $bot->replyMessage($replyToken, $sendMessage);
   if(!$response->isSucceeded()){
     error_log('Failed! '. $response->getHTTPStatus . ' '.$response->getRawBody());
