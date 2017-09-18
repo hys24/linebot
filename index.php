@@ -76,7 +76,8 @@ function replyImageMessage($bot, $replyToken, $originalImageUrl, $previewImageUr
 }
 
 function replyMultiMessage($bot, $replyToken, ...$msgs){
-  $sendMessage = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder()->add($msgs);
+  $sendMessage = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+  $sendMessage->add($msgs);
   $response = $bot->replyMessage($replyToken, $sendMessage);
   if(!$response->isSucceeded()){
     error_log('Failed! '. $response->getHTTPStatus . ' '.$response->getRawBody());
