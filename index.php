@@ -78,7 +78,7 @@ function replyImageMessage($bot, $replyToken, $originalImageUrl, $previewImageUr
 function replyMultiMessage($bot, $replyToken, ...$msgs){
   $sendMessage = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
   foreach ($msgs as $msg) {
-    $sendMessage.add($msg);
+    $sendMessage->add($msg);
   }
   $sendMessage->add($msgs);
 
