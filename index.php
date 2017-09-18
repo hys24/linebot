@@ -28,18 +28,19 @@ foreach ($events as $event) {
     continue;
   }
 
-  $hash = array("やあやあ", "ほう…",  "えっ？", "あーーーーー！", "むむっ！","これは…！","なんと…","ハン！","ドゥーン！","ぱーどぅん？","ほう...","ナンだと？","ヒーハー！","笑","ありがとぅーす！");
-  $key = array_rand($hash);
-  error_log($hash[$key]);
-
   //replyTextMessage($bot, $event->getReplyToken(),$hash[$key]);//$event->getText());
   $pdo = connectDb();
-  $sql = 'select url from tanilun';
+  $sql = 'select * url from tanilun where id = "1"';
   try{
     $stmt = $pdo->query($sql);
     while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
         error_log($result['url']);
-        replyImageMessage($bot, $event->getReplyToken(),$result['url'],$result['url']);
+        replyMultiMessage($bot, $event->getReplyToken(),
+        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']),
+        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['price']),
+        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description']),
+        new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image'])
+      );
     }
 
   }catch (PDOException $e){
@@ -77,6 +78,12 @@ function replyImageMessage($bot, $replyToken, $originalImageUrl, $previewImageUr
   }
 }
 
-
+function replyMultiMessage($bot, $replyToken, ...$msgs){
+  $sendMessage = new MultiMessageBuilder()->add($msgs);
+  $response = $bot->replyMessage($replyToken, $sendMessage);
+  if(!$response->isSucceeded()){
+    error_log('Failed! '. $response->getHTTPStatus . ' '.$response->getRawBody());
+  }
+}
 
  ?>
