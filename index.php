@@ -32,14 +32,14 @@ foreach ($events as $event) {
   error_log("a");
   switch ($messageText) {
     case "おすすめ":
-      getRecommend();
+      getRecommend($event);
       break;
     default :
   }
 }
   //replyTextMessage($bot, $event->getReplyToken(),$hash[$key]);//$event->getText());
 
-function getRecommend(){
+function getRecommend($event){
   $pdo = connectDb();
   $sql = 'select * from tanilun';
   try{
