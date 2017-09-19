@@ -34,7 +34,7 @@ foreach ($events as $event) {
     case "コスパ":
       break;
     case "スタンプ":
-      replyStickerMessage(1, 1);break;
+      replyStickerMessage($bot, $event->getReplyToken(), 1, 1);break;
     default :
   }
 }
