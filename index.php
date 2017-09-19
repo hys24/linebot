@@ -38,11 +38,12 @@ foreach ($events as $event) {
     $result = $allResult[$key];
     replyLocationMessage($bot, $event->getReplyToken(),"和っぷる","谷町","34.684808","135.516523");
     //while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
-        // replyMultiMessage($bot, $event->getReplyToken(),
-        //   new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
-        //   new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']." @".$result['shop']),
-        //   new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description'])
-        // );
+        replyMultiMessage($bot, $event->getReplyToken(),
+          new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
+          new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']),
+          new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description']),
+          new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($result['shop'],$result['address'],$result['lat'],$result['lon'])
+        );
     //}
 
   }catch (PDOException $e){
