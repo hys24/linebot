@@ -36,12 +36,13 @@ foreach ($events as $event) {
     $allResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $key = array_rand($allResult);
     $result = $allResult[$key];
+    replyLocationMessage($bot, $event->getReplyToken(),"和っぷる","谷町","34.684808","135.516523");
     //while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
-        replyMultiMessage($bot, $event->getReplyToken(),
-        new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
-        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']." @".$result['shop']),
-        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description'])
-      );
+        // replyMultiMessage($bot, $event->getReplyToken(),
+        //   new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
+        //   new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']." @".$result['shop']),
+        //   new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description'])
+        // );
     //}
 
   }catch (PDOException $e){
@@ -62,6 +63,7 @@ function connectDb(){
   return $pdo;
 }
 
+//テキストを返信
 function replyTextMessage($bot, $replyToken, $text){
   $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($text));
   if(!$response->isSucceeded()){
@@ -69,6 +71,7 @@ function replyTextMessage($bot, $replyToken, $text){
   }
 }
 
+//画像を返信
 function replyImageMessage($bot, $replyToken, $originalImageUrl, $previewImageUrl){
   $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($originalImageUrl, $previewImageUrl));
   if(!$response->isSucceeded()){
@@ -76,12 +79,46 @@ function replyImageMessage($bot, $replyToken, $originalImageUrl, $previewImageUr
   }
 }
 
-function replyMultiMessage($bot, $replyToken, ...$msgs){
-  $sendMessage = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-  foreach ($msgs as $msg) {
-    $sendMessage->add($msg);
+//位置情報を返信
+function replyLocationMessage($bot, $replyToken, $title, $address, $lat, $lon){
+  $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($title, $address, $lat, $lon));
+  if(!$response->isSucceeded()){
+    error_log('Failed! '. $response->getHTTPStatus . ' '.$response->getRawBody());
   }
-  $response = $bot->replyMessage($replyToken, $sendMessage);
+}
+
+//スタンプを返信
+function replyStickerMessage($bot, $replyToken, $packageId, $stickerId){
+  $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder($$packageId, $stickerId));
+  if(!$response->isSucceeded()){
+    error_log('Failed! '. $response->getHTTPStatus . ' '.$response->getRawBody());
+  }
+}
+
+//Buttonsテンプレート
+function replyButtonsTemplate($bot, $replyToken, $alternativeText, $title, $text, $imageUrl, ...$actions){
+  $actionArray = array();
+  foreach ($actions as $action) {
+    array_push($actionArray, $action);
+  }
+  $msgBuilder = new \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder(
+    $alternativeText,
+    new \LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder($title, $text, $imageUrl, $actionArray)
+  );
+  $response = $bot->replyMessage($replyToken, $msgBuilder);
+  if(!$response->isSucceeded()){
+    error_log('Failed! '. $response->getHTTPStatus . ' '.$response->getRawBody());
+  }
+}
+
+
+//複数のメッセージを返信
+function replyMultiMessage($bot, $replyToken, ...$msgs){
+  $msgBuilder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+  foreach ($msgs as $msg) {
+    $msgBuilder->add($msg);
+  }
+  $response = $bot->replyMessage($replyToken, $msgBuilder);
   if(!$response->isSucceeded()){
     error_log('Failed! '. $response->getHTTPStatus . ' '.$response->getRawBody());
   }
