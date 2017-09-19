@@ -31,9 +31,9 @@ foreach ($events as $event) {
   switch ($messageText) {
     case "本日のおすすめ":
       replyRecommend($bot, $event);break;
-    case "コスパ"
+    case "コスパ":
       break;
-    case "スタンプ"
+    case "スタンプ":
       replyStickerMessage(1, 1);break;
     default :
   }
