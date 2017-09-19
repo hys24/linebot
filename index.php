@@ -36,7 +36,7 @@ foreach ($events as $event) {
     $allResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $key = array_rand($allResult);
     $result = $allResult[$key];
-    replyLocationMessage($bot, $event->getReplyToken(),"和っぷる","谷町","34.684808","135.516523");
+    //replyLocationMessage($bot, $event->getReplyToken(),"和っぷる","谷町","34.684808","135.516523");
     //while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
         replyMultiMessage($bot, $event->getReplyToken(),
           new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
