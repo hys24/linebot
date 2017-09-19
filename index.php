@@ -27,8 +27,18 @@ foreach ($events as $event) {
     error_log('Non text message has come');
     continue;
   }
-
+  $messageText = $event->getText();
+  error_log($event->getUserId);
+  switch ($messageText) {
+    case "おすすめ":
+      getRecommend();
+      break;
+    default :
+  }
+}
   //replyTextMessage($bot, $event->getReplyToken(),$hash[$key]);//$event->getText());
+
+function getRecommend(){
   $pdo = connectDb();
   $sql = 'select * from tanilun';
   try{
@@ -36,16 +46,12 @@ foreach ($events as $event) {
     $allResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $key = array_rand($allResult);
     $result = $allResult[$key];
-    //replyLocationMessage($bot, $event->getReplyToken(),"和っぷる","谷町","34.684808","135.516523");
-    //while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
-        replyMultiMessage($bot, $event->getReplyToken(),
-          new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
-          new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']),
-          new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description']),
-          new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($result['shop'],$result['address'],$result['lat'],$result['lon'])
-        );
-    //}
-
+    replyMultiMessage($bot, $event->getReplyToken(),
+      new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
+      new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']),
+      new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description']),
+      new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($result['shop'],$result['address'],$result['lat'],$result['lon'])
+    );
   }catch (PDOException $e){
     error_log('Error:'.$e->getMessage());
     die();
