@@ -28,9 +28,9 @@ foreach ($events as $event) {
     continue;
   }
   $messageText = $event->getText();
-  error_log($event->getUserId());
+  //error_log($event->getUserId());
   switch ($messageText) {
-    case "おすすめ":
+    case "本日のおすすめ":
       getRecommend();
       break;
     default :
