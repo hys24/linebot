@@ -98,7 +98,7 @@ function replyLocationMessage($bot, $replyToken, $title, $address, $lat, $lon){
 
 //スタンプを返信
 function replyStickerMessage($bot, $replyToken, $packageId, $stickerId){
-  $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder($$packageId, $stickerId));
+  $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder($packageId, $stickerId));
   if(!$response->isSucceeded()){
     error_log('Failed! '. $response->getHTTPStatus . ' '.$response->getRawBody());
   }
