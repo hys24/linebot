@@ -28,18 +28,19 @@ foreach ($events as $event) {
     continue;
   }
   $messageText = $event->getText();
-  error_log($event->getUserId());
-  error_log("a");
   switch ($messageText) {
     case "本日のおすすめ":
-      getRecommend($bot, $event);
+      replyRecommend($bot, $event);break;
+    case "コスパ"
       break;
+    case "スタンプ"
+      replyStickerMessage(1, 1);break;
     default :
   }
 }
   //replyTextMessage($bot, $event->getReplyToken(),$hash[$key]);//$event->getText());
 
-function getRecommend($bot, $event){
+function replyRecommend($bot, $event){
   $pdo = connectDb();
   $sql = 'select * from tanilun';
   try{
