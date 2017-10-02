@@ -29,10 +29,7 @@ foreach ($events as $event) {
   }
   $messageText = $event->getText();
   $result = getResult($messageText);
-  if($result == ""){
-    error_log('no result.');
-    return;
-  }
+  if($result == "")replyStickerMessage($bot, $event->getReplyToken(), 1, 1);
   replyMultiMessage($bot, $event->getReplyToken(),
     new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']),
@@ -41,10 +38,6 @@ foreach ($events as $event) {
   );
 }
   //replyTextMessage($bot, $event->getReplyToken(),$hash[$key]);//$event->getText());
-
-  function reply($bot, $event){
-
-  }
 
   function getResult($messageText){
     $pdo = connectDb();
@@ -65,25 +58,7 @@ foreach ($events as $event) {
     return $array[$key];
   }
 
-function replyRecommend($bot, $event){
-  $pdo = connectDb();
-  $sql = 'select * from tanilun';
-  try{
-    $stmt = $pdo->query($sql);
-    $allResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $key = array_rand($allResult);
-    $result = $allResult[$key];
-    replyMultiMessage($bot, $event->getReplyToken(),
-      new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
-      new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']),
-      new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description']),
-      new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($result['shop'],$result['address'],$result['lat'],$result['lon'])
-    );
-  }catch (PDOException $e){
-    error_log('Error:'.$e->getMessage());
-    die();
-  }
-}
+
 
 function connectDb(){
   $url = parse_url(getenv('DATABASE_URL'));
