@@ -41,7 +41,10 @@ foreach ($events as $event) {
   }
 
   $result = getResult($messageText);
-  //if($result == "")replyStickerMessage($bot, $event->getReplyToken(), 1, 1);
+  if($result == ""){
+    replyStickerMessage($bot, $event->getReplyToken(), 1, 1);
+    return;
+  }
   replyMultiMessage($bot, $event->getReplyToken(),
     new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']),
