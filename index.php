@@ -29,7 +29,10 @@ foreach ($events as $event) {
   }
   $messageText = $event->getText();
   $result = getResult($messageText);
-  if($result == "")return;
+  if($result == ""){
+    error_log('no result.');
+    return;
+  }
   replyMultiMessage($bot, $event->getReplyToken(),
     new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']),
@@ -50,7 +53,7 @@ foreach ($events as $event) {
     try{
       $stmt = $pdo->query($sql);
       while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
-        if(in_array($keyword, $result))array_push($array, $result);
+        if(in_array($messageText, $result))array_push($array, $result);
       }
     }catch (PDOException $e){
       error_log('Error:'.$e->getMessage());
