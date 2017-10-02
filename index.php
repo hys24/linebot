@@ -53,7 +53,8 @@ foreach ($events as $event) {
     try{
       $stmt = $pdo->query($sql);
       while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
-        if(in_array($messageText, $result))error_log(print_r($result,true));//array_push($array, $result);
+        error_log(print_r($result,true));
+        //if(in_array($messageText, $result))error_log(print_r($result,true));//array_push($array, $result);
       }
     }catch (PDOException $e){
       error_log('Error:'.$e->getMessage());
