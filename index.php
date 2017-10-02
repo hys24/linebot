@@ -59,7 +59,7 @@ foreach ($events as $event) {
       error_log('Error:'.$e->getMessage());
       die();
     }
-    if($array->length == 0)return "";
+    if(count($array) == 0)return "";
     $key = array_rand($array);
     return $array[$key];
   }
