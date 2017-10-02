@@ -28,17 +28,38 @@ foreach ($events as $event) {
     continue;
   }
   $messageText = $event->getText();
-  switch ($messageText) {
-    case "本日のおすすめ":
-      replyRecommend($bot, $event);break;
-    case "コスパ":
-      break;
-    case "スタンプ":
-      replyStickerMessage($bot, $event->getReplyToken(), 1, 1);break;
-    default :
-  }
+  $result = getResult($messageText);
+  if($result == "")return;
+  replyMultiMessage($bot, $event->getReplyToken(),
+    new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
+    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']),
+    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description']),
+    new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($result['shop'],$result['address'],$result['lat'],$result['lon'])
+  );
 }
   //replyTextMessage($bot, $event->getReplyToken(),$hash[$key]);//$event->getText());
+
+  function reply($bot, $event){
+
+  }
+
+  function getResult($messageText){
+    $pdo = connectDb();
+    $sql = 'select * from tanilun';
+    $array = array();
+    try{
+      $stmt = $pdo->query($sql);
+      while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+        if(in_array($keyword, $result))array_push($array, $result);
+      }
+    }catch (PDOException $e){
+      error_log('Error:'.$e->getMessage());
+      die();
+    }
+    if($array->length == 0)return "";
+    $key = array_rand($array);
+    return $array[$key];
+  }
 
 function replyRecommend($bot, $event){
   $pdo = connectDb();
