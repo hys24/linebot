@@ -45,12 +45,7 @@ foreach ($events as $event) {
     replyStickerMessage($bot, $event->getReplyToken(), 1, 1);
     return;
   }
-  replyMultiMessage($bot, $event->getReplyToken(),
-    new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
-    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']." yen"),
-    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description']),
-    new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($result['shop'],$result['address'],$result['lat'],$result['lon'])
-  );
+  replyMenu($bot, $event->getReplyToken(), $result);
 }
   //replyTextMessage($bot, $event->getReplyToken(),$hash[$key]);//$event->getText());
 
@@ -82,17 +77,13 @@ foreach ($events as $event) {
       $allResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
       $key = array_rand($allResult);
       $result = $allResult[$key];
-      replyMultiMessage($bot, $event->getReplyToken(),
-        new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
-        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']),
-        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description']),
-        new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($result['shop'],$result['address'],$result['lat'],$result['lon'])
-      );
+      replyMenu($bot, $event->getReplyToken(), $result);
     }catch (PDOException $e){
       error_log('Error:'.$e->getMessage());
       die();
     }
   }
+
 
 
 function connectDb(){
@@ -166,6 +157,15 @@ function replyMultiMessage($bot, $replyToken, ...$msgs){
   if(!$response->isSucceeded()){
     error_log('Failed! '. $response->getHTTPStatus . ' '.$response->getRawBody());
   }
+}
+
+function replyMenu($bot, $replyToken, $data){
+  replyMultiMessage($bot, $event->getReplyToken(),
+    new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($data['food_image'],$data['food_image']),
+    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($data['food']." ".$data['price']." yen"),
+    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($data['food_description']),
+    new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($data['shop'],$data['address'],$data['lat'],$data['lon'])
+  );
 }
 
  ?>
