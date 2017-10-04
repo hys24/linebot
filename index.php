@@ -33,8 +33,6 @@ foreach ($events as $event) {
   switch ($messageText) {
     case "本日のおすすめ":
       replyRecommend($bot, $event);return;
-    case "コスパ":
-      return;
     case "スタンプ":
       replyStickerMessage($bot, $event->getReplyToken(), 1, 1);return;
     default :
