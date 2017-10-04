@@ -47,7 +47,7 @@ foreach ($events as $event) {
   }
   replyMultiMessage($bot, $event->getReplyToken(),
     new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($result['food_image'],$result['food_image']),
-    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']),
+    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food']." ".$result['price']." yen"),
     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($result['food_description']),
     new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($result['shop'],$result['address'],$result['lat'],$result['lon'])
   );
