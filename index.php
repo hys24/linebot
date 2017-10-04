@@ -160,7 +160,7 @@ function replyMultiMessage($bot, $replyToken, ...$msgs){
 }
 
 function replyMenu($bot, $replyToken, $data){
-  replyMultiMessage($bot, $event->getReplyToken(),
+  replyMultiMessage($bot, $replyToken,
     new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($data['food_image'],$data['food_image']),
     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($data['food']." ".$data['price']." yen"),
     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($data['food_description']),
